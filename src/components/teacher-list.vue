@@ -5,7 +5,7 @@
       ref="multipleTable"
       :data="teachers"
       tooltip-effect="dark"
-      style="width: 100%"
+      max-height="780px"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55"> </el-table-column>
@@ -22,12 +22,26 @@
 
       <el-table-column prop="teacher_status" label="状态" width="130" />
 
-      <el-table-column label="操作" width="180">
+      <!-- 操作 -->
+      <el-table-column label="操作" width="240">
         <template slot-scope="scope">
+          <!-- 编辑 -->
           <el-button size="mini" @click="handleEdit(scope.row.teacher_id)">
             编辑
           </el-button>
 
+          <!-- 重置 -->
+          <el-popconfirm
+            title="确认重置此用户？"
+            style="margin-left:5px"
+            @confirm="handleReset(scope.$index, scope.row.teacher_id)"
+          >
+            <el-button size="mini" type="info" slot="reference">
+              重置
+            </el-button>
+          </el-popconfirm>
+
+          <!-- 删除 -->
           <el-popconfirm
             title="确认删除此用户？"
             style="margin-left:5px"
@@ -40,6 +54,7 @@
         </template>
       </el-table-column>
 
+      <!-- 禁用 -->
       <el-table-column label="禁用中">
         <template slot-scope="scope">
           <el-switch
@@ -52,7 +67,17 @@
       </el-table-column>
     </el-table>
 
-    <div style="margin-top: 20px">
+    <!-- 分页 -->
+    <el-pagination
+      class="pagination"
+      background
+      layout="prev, pager, next"
+      :total="1000"
+    >
+    </el-pagination>
+
+    <!-- 工具按钮 -->
+    <div class="tools">
       <el-button @click="toggleSelection()">取消选择</el-button>
     </div>
   </div>
@@ -62,6 +87,7 @@
 export default {
   data() {
     return {
+      // 教师列表
       teachers: [{
         teacher_id: '666666666',
         teacher_name: '张三',
@@ -86,6 +112,78 @@ export default {
         teacher_email: '5558887715@321.com',
         teacher_status: 1,
         enable: false
+      }, {
+        teacher_id: '777777777',
+        teacher_name: '张三',
+        teacher_sex: 0,
+        teacher_phone: '13512345687',
+        teacher_email: '5558887715@321.com',
+        teacher_status: 1,
+        enable: false
+      }, {
+        teacher_id: '777777777',
+        teacher_name: '张三',
+        teacher_sex: 0,
+        teacher_phone: '13512345687',
+        teacher_email: '5558887715@321.com',
+        teacher_status: 1,
+        enable: false
+      }, {
+        teacher_id: '777777777',
+        teacher_name: '张三',
+        teacher_sex: 0,
+        teacher_phone: '13512345687',
+        teacher_email: '5558887715@321.com',
+        teacher_status: 1,
+        enable: false
+      }, {
+        teacher_id: '777777777',
+        teacher_name: '张三',
+        teacher_sex: 0,
+        teacher_phone: '13512345687',
+        teacher_email: '5558887715@321.com',
+        teacher_status: 1,
+        enable: false
+      }, {
+        teacher_id: '777777777',
+        teacher_name: '张三',
+        teacher_sex: 0,
+        teacher_phone: '13512345687',
+        teacher_email: '5558887715@321.com',
+        teacher_status: 1,
+        enable: false
+      }, {
+        teacher_id: '777777777',
+        teacher_name: '张三',
+        teacher_sex: 0,
+        teacher_phone: '13512345687',
+        teacher_email: '5558887715@321.com',
+        teacher_status: 1,
+        enable: false
+      }, {
+        teacher_id: '777777777',
+        teacher_name: '张三',
+        teacher_sex: 0,
+        teacher_phone: '13512345687',
+        teacher_email: '5558887715@321.com',
+        teacher_status: 1,
+        enable: false
+      }, {
+        teacher_id: '777777777',
+        teacher_name: '张三',
+        teacher_sex: 0,
+        teacher_phone: '13512345687',
+        teacher_email: '5558887715@321.com',
+        teacher_status: 1,
+        enable: false
+      }, {
+        teacher_id: '777777777',
+        teacher_name: '张三',
+        teacher_sex: 0,
+        teacher_phone: '13512345687',
+        teacher_email: '5558887715@321.com',
+        teacher_status: 1,
+        enable: false
       }],
       multipleSelection: []
     }
@@ -97,10 +195,16 @@ export default {
 
     },
 
-    // 点击删除
+    // 处理重置
+    handleReset(index, id) {
+      console.log('重置：' + index + ' ' + id);
+    },
+
+    // 处理删除
     handleDelete(index, id) {
       console.log('删除：' + index + ' ' + id);
     },
+
 
     handleChange(value) {
       console.log(value);
@@ -130,6 +234,17 @@ export default {
 
   #teacher-table {
     width: 100%;
+  }
+
+  // 分页控件
+  .pagination {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  // 底部工具按钮
+  .tools {
+    margin-top: 10px;
   }
 }
 </style>

@@ -14,12 +14,15 @@
         <el-input v-model="formData.password" type="password"></el-input>
       </el-form-item>
 
-      <el-button class="btn-login" type="primary">登录</el-button>
+      <el-button class="btn-login" @click="handleLogin" type="primary"
+        >登录</el-button
+      >
     </el-form>
   </div>
 </template>
 
 <script>
+import TextUtil from '@/util/TextUtil';
 export default {
   data() {
     return {
@@ -30,7 +33,17 @@ export default {
     }
   },
   methods: {
+    // 点击登录
+    handleLogin() {
+      if (TextUtil.isEmpty(this.formData.username) || TextUtil.isEmpty(this.formData.password)) {
+        this.$message.warning('账号和密码不能为空！');
+        return;
+      }
 
+      // 验证用户名和密码
+      this.$router.push('/')
+
+    }
   }
 }
 </script>

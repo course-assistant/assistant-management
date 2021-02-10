@@ -222,7 +222,10 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     }
-  }
+  },
+  // beforeCreate() {
+  //   document.title = '教师列表';
+  // },
 }
 </script>
 

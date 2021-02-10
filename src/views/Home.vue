@@ -78,7 +78,10 @@ export default {
     handleLogout() {
       this.$message.info('退出');
     }
-  }
+  },
+  // beforeCreate() {
+  //   document.title = 'Home';
+  // },
 }
 </script>
 
@@ -87,7 +90,9 @@ export default {
   height: 100%;
   .header {
     line-height: 60px;
-    background-color: #b3c0d1;
+    background: #b3c0d1;
+    box-shadow: 0 2px 4px -1px #dddddd;
+
     .title-div {
       text-align: center;
     }

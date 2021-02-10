@@ -14,24 +14,36 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta: {
+      title: '登录'
+    }
   },
   {
     path: '/',
     name: 'Home',
     component: Home,
+    meta: {
+      title: '首页'
+    },
     children: [
       // 教师列表
       {
         name: 'teacher-list',
         path: 'teacher-list',
-        component: TeacherList
+        component: TeacherList,
+        meta: {
+          title: '教师管理 - 教师列表'
+        }
       },
       // 学生列表
       {
         name: 'student-list',
         path: 'student-list',
-        component: StudnetList
+        component: StudnetList,
+        meta: {
+          title: '学生管理 - 学生列表'
+        }
       }
     ],
   },

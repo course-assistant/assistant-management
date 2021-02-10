@@ -7,6 +7,9 @@
 <script>
 export default {
 
+  // beforeCreate() {
+  //   document.title = '学生列表';
+  // },
 }
 </script>
 

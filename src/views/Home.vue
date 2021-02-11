@@ -3,7 +3,9 @@
     <!-- header -->
     <el-header class="header">
       <el-row>
-        <el-col :span="4"> LOGO </el-col>
+        <el-col id="logo" :span="4">
+          <p @click="toHomePage">LOGO</p>
+        </el-col>
         <el-col class="title-div" :span="16">
           <h2>课程助手管理员</h2>
         </el-col>
@@ -55,7 +57,7 @@
             </template>
             <el-menu-item-group>
               <template slot="title">管理其他</template>
-              <el-menu-item index="3-1">其他</el-menu-item>
+              <el-menu-item index="other">其他</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -75,13 +77,16 @@ export default {
   components: {
   },
   methods: {
+    // 进入首页
+    toHomePage() {
+      if ('/' !== this.$route.path) {
+        this.$router.push('/');
+      }
+    },
     handleLogout() {
       this.$message.info('退出');
     }
   },
-  // beforeCreate() {
-  //   document.title = 'Home';
-  // },
 }
 </script>
 
@@ -92,6 +97,10 @@ export default {
     line-height: 60px;
     background: #b3c0d1;
     box-shadow: 0 2px 4px -1px #dddddd;
+
+    #logo {
+      cursor: pointer;
+    }
 
     .title-div {
       text-align: center;

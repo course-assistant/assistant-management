@@ -23,12 +23,17 @@
 
 <script>
 import TextUtil from '@/util/TextUtil';
+import request from '@/request/http.js';
+
+import axios from 'axios';
+import qs from 'qs';
 export default {
   data() {
     return {
       formData: {
         username: '',
-        password: ''
+        password: '',
+        type: 1
       }
     }
   },
@@ -41,8 +46,20 @@ export default {
       }
 
       // 验证用户名和密码
-      this.$router.push('/')
+      // this.$router.push('/')
 
+      console.log('formData');
+      console.log(this.formData);
+
+      axios.post('http://127.0.0.1:8686/login', qs.stringify({
+        username: this.formData.username,
+        password: this.formData.password,
+        type: 1
+      })).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
   }
 }

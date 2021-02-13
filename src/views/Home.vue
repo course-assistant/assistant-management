@@ -131,7 +131,7 @@ export default {
       return;
     }
     // 验证成功
-    console.log(data);
+    console.log('身份验证成功');
     this.$message({ showClose: true, type: 'success', message: '欢迎回来' });
   },
 }

@@ -7,16 +7,13 @@
 <script>
 export default {
 
-  // beforeCreate() {
-  //   document.title = '学生列表';
-  // },
 }
 </script>
 
 <style lang="less" scoped>
 #student-div {
   width: 100%;
-  height: 878px;
+  height: 877px;
   overflow: auto;
 }
 </style>

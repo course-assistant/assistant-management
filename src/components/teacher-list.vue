@@ -84,110 +84,41 @@
 </template>
 
 <script>
+import axios from 'axios';
+import qs from 'qs';
 export default {
   data() {
     return {
       // 教师列表
       teachers: [{
-        teacher_id: '666666666',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '1236547891@qq.com',
-        teacher_status: 1,
-        enable: true
-      }, {
-        teacher_id: '888888888',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '1236547891@321.com',
-        teacher_status: 1,
-        enable: true
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
-        enable: false
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
-        enable: false
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
-        enable: false
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
-        enable: false
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
-        enable: false
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
-        enable: false
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
-        enable: false
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
-        enable: false
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
-        enable: false
-      }, {
-        teacher_id: '777777777',
-        teacher_name: '张三',
-        teacher_sex: 0,
-        teacher_phone: '13512345687',
-        teacher_email: '5558887715@321.com',
-        teacher_status: 1,
+        teacher_id: '正在获取中...',
+        teacher_name: '正在获取中...',
+        teacher_sex: '获取中...',
+        teacher_phone: '正在获取中...',
+        teacher_email: '正在获取中...',
+        teacher_status: 'LOADING',
         enable: false
       }],
       multipleSelection: []
     }
   },
+
+  // 数据加载
+  async created() {
+    let [data, err] = await this.$awaitWrap(this.$get('teacher/all', {
+      start: 0,
+      size: 12
+    }));
+    if (err) {
+      this.$message.warning(err);
+      this.teachers = [];
+      return;
+    }
+    // 请求成功，拿到数据
+    console.log(data);
+    this.teachers = data.data;
+  },
+
   methods: {
 
     // 点击编辑
@@ -223,16 +154,13 @@ export default {
       this.multipleSelection = val;
     }
   },
-  // beforeCreate() {
-  //   document.title = '教师列表';
-  // },
 }
 </script>
 
 <style lang="less" scoped>
 #teacher-div {
   width: 100%;
-  height: 878px;
+  height: 877px;
   overflow: auto;
 
   #teacher-table {

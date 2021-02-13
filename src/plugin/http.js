@@ -12,9 +12,7 @@ const axios_instance = axios.create({
     timeout: 5000
 });
 
-
 MyAxiosHttp.install = (Vue) => {
-
     /**
      * 添加get方法
      * 返回一个Promise
@@ -22,9 +20,14 @@ MyAxiosHttp.install = (Vue) => {
      * @param {*} path 
      * @param {*} params 
      */
-    Vue.prototype.$get = (methodOptions) => {
+    Vue.prototype.$get = (path, params) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(path, qs.stringify(params)).then(res => {
+            axios_instance.get(path, {
+                params: params,
+                headers: {
+                    token: localStorage.getItem('hncj_management_admin_token')
+                }
+            }).then(res => {
                 if (res.data) {
                     if (res.data.code === 200) {
                         resolve(res.data);
@@ -47,7 +50,11 @@ MyAxiosHttp.install = (Vue) => {
      */
     Vue.prototype.$post = (path, params) => {
         return new Promise((resolve, reject) => {
-            axios_instance.post(path, qs.stringify(params)).then(res => {
+            axios_instance.post(path, qs.stringify(params), {
+                headers: {
+                    token: localStorage.getItem('hncj_management_admin_token')
+                }
+            }).then(res => {
                 if (res.data) {
                     if (res.data.code === 200) {
                         resolve(res.data);

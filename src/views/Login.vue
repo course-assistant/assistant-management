@@ -1,64 +1,52 @@
 <template>
   <div class="login">
-    <el-form
-      class="login-form"
-      label-position="left"
-      label-width="80px"
-      :model="formData"
-    >
+    <el-form class="login-form" label-position="left" label-width="80px">
       <h2 class="title">管理员登录</h2>
       <el-form-item label="账号：" label-width="70px">
-        <el-input v-model="formData.username"></el-input>
+        <el-input v-model="username"></el-input>
       </el-form-item>
       <el-form-item label="密码：" label-width="70px">
-        <el-input v-model="formData.password" type="password"></el-input>
+        <el-input v-model="password" type="password"></el-input>
       </el-form-item>
 
-      <el-button class="btn-login" @click="handleLogin" type="primary"
-        >登录</el-button
-      >
+      <el-button class="btn-login" @click="handleLogin" type="primary">
+        登录
+      </el-button>
     </el-form>
   </div>
 </template>
 
 <script>
 import TextUtil from '@/util/TextUtil';
-
-import axios from 'axios';
-import qs from 'qs';
+import MD5Util from '@/util/MD5Util';
 export default {
   data() {
     return {
-      formData: {
-        username: '',
-        password: '',
-        type: 1
-      }
+      username: '',
+      password: ''
+
     }
   },
   methods: {
     // 点击登录
-    handleLogin() {
-      if (TextUtil.isEmpty(this.formData.username) || TextUtil.isEmpty(this.formData.password)) {
+    async handleLogin() {
+      if (TextUtil.isEmpty(this.username) || TextUtil.isEmpty(this.password)) {
         this.$message.warning('账号和密码不能为空！');
         return;
       }
-
       // 验证用户名和密码
-      // this.$router.push('/')
-
-      console.log('formData');
-      console.log(this.formData);
-
-      axios.post('http://127.0.0.1:8686/login', qs.stringify({
-        username: this.formData.username,
-        password: this.formData.password,
+      let [data, err] = await this.$awaitWrap(this.$post('login', {
+        username: this.username,
+        password: MD5Util(this.password),
         type: 1
-      })).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
-        console.log(error);
-      });
+      }));
+      if (err) {
+        this.$message.warning(err);
+        return;
+      }
+      // 登录成功，将token存入本地存储
+      localStorage.setItem('hncj_management_admin_token', data.data.token);
+      this.$router.push('/');
     }
   }
 }

@@ -19,9 +19,9 @@
               title="确认退出此用户？"
               @confirm="confirmLogout"
             >
-              <el-button slot="reference" type="text" style="color:#000"
-                >root 退出</el-button
-              >
+              <el-button slot="reference" type="text" style="color:#000">
+                安全退出
+              </el-button>
             </el-popconfirm>
           </a>
         </el-col>

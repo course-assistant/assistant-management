@@ -10,7 +10,20 @@
           <h2>课程助手管理员</h2>
         </el-col>
         <el-col class="logout-div" :span="4">
-          <a class="logout" title="退出登录" @click="handleLogout">root 退出</a>
+          <a class="logout" title="退出登录" @click="handleLogout">
+            <!-- root 退出 -->
+            <el-popconfirm
+              confirm-button-text="确定"
+              cancel-button-text="取消"
+              icon-color="#66b1ff"
+              title="确认退出此用户？"
+              @confirm="confirmLogout"
+            >
+              <el-button slot="reference" type="text" style="color:#000"
+                >root 退出</el-button
+              >
+            </el-popconfirm>
+          </a>
         </el-col>
       </el-row>
     </el-header>
@@ -19,7 +32,7 @@
       <!-- Menu -->
       <el-aside class="aside" width="230px">
         <el-menu
-          default-active="2"
+          default-active="1"
           :router="true"
           class="el-menu-vertical-demo"
         >
@@ -74,6 +87,10 @@
 <script>
 export default {
   name: 'Home',
+  data: () => {
+    return {
+    }
+  },
   components: {
   },
   methods: {
@@ -83,14 +100,28 @@ export default {
         this.$router.push('/');
       }
     },
-    handleLogout() {
-      this.$message.info('退出');
+    // 点击退出
+    handleLogout() { },
+    confirmLogout() {
+      this.$router.push('/login');
+      this.$message.info('已退出');
+    },
+  },
+  // 在创建组件前，验证登录信息
+  beforeCreate() {
+    // 获取token
+    let token = localStorage.getItem("hncj_management_admin_token");
+    if (!token) {
+      this.$message.warning('请先登录');
+      // this.$router.push('/login');
+      return;
     }
   },
 }
 </script>
 
 <style lang="less">
+// 最外层容器
 .container {
   height: 100%;
   .header {

@@ -20,7 +20,7 @@
               @confirm="confirmLogout"
             >
               <el-button slot="reference" type="text" style="color:#000">
-                安全退出
+                {{ current_admin_id }} 退出
               </el-button>
             </el-popconfirm>
           </a>
@@ -89,6 +89,7 @@ export default {
   name: 'Home',
   data: () => {
     return {
+      current_admin_id: localStorage.getItem('hncj_management_admin_id')
     }
   },
   components: {
@@ -104,6 +105,7 @@ export default {
     handleLogout() { },
     confirmLogout() {
       localStorage.setItem("hncj_management_admin_token", '');
+      localStorage.setItem("hncj_management_admin_id", '');
       this.$router.push('/login');
       this.$message.info('已退出');
     },

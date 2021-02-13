@@ -46,6 +46,7 @@ export default {
       }
       // 登录成功，将token存入本地存储
       localStorage.setItem('hncj_management_admin_token', data.data.token);
+      localStorage.setItem('hncj_management_admin_id', data.data.id);
       this.$router.push('/');
     }
   }

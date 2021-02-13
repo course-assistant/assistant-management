@@ -60,7 +60,7 @@
           <el-switch
             v-model="scope.row.enable"
             active-color="#ff4949"
-            @change="handleChange"
+            @change="handleChange(scope.row)"
           >
           </el-switch>
         </template>
@@ -72,20 +72,18 @@
       class="pagination"
       background
       layout="prev, pager, next"
-      :total="1000"
+      :total="totalTeacherCount"
     >
     </el-pagination>
 
     <!-- 工具按钮 -->
     <div class="tools">
-      <el-button @click="toggleSelection()">取消选择</el-button>
+      <el-button @click="deleteSelection()">删除所选</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import qs from 'qs';
 export default {
   data() {
     return {
@@ -99,27 +97,44 @@ export default {
         teacher_status: 'LOADING',
         enable: false
       }],
+      // 教师总数
+      totalTeacherCount: 1,
       multipleSelection: []
     }
   },
 
   // 数据加载
   async created() {
-    let [data, err] = await this.$awaitWrap(this.$get('teacher/all', {
-      start: 0,
-      size: 12
-    }));
-    if (err) {
-      this.$message.warning(err);
-      this.teachers = [];
-      return;
-    }
-    // 请求成功，拿到数据
-    console.log(data);
-    this.teachers = data.data;
+    this.refersh(0, 12);
   },
 
   methods: {
+    // 请求数据并刷新
+    async refersh(start, size) {
+      let [data, err] = await this.$awaitWrap(this.$get('teacher/all', {
+        start: start,
+        size: size
+      }));
+      if (err) {
+        this.$message.warning(err);
+        this.teachers = [];
+        return;
+      }
+      // 请求成功，拿到数据
+      console.log(data);
+      this.teachers = this.formatData(data.data.teachers);
+      this.totalTeacherCount = data.data.total;
+    },
+
+    // 处理数据
+    formatData(teachers) {
+      for (let i = 0; i < teachers.length; i++) {
+        teachers[i].teacher_sex = teachers[i].teacher_sex === 0 ? '女' : '男';
+        teachers[i]['enable'] = teachers[i].teacher_status === 0;
+        teachers[i].teacher_status = teachers[i].teacher_status === 1 ? 'OK' : 'Disable';
+      }
+      return teachers;
+    },
 
     // 点击编辑
     handleEdit(id) {
@@ -136,20 +151,34 @@ export default {
       console.log('删除：' + index + ' ' + id);
     },
 
+    // 禁用按钮切换
+    handleChange(row) {
+      console.log(row.teacher_id);
+      console.log(row.teacher_status);
+      // 切换为disable
+      if (row.teacher_status === 'OK') {
 
-    handleChange(value) {
-      console.log(value);
-    },
-
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
       }
+      // 切换为OK
+      else {
+
+      }
+      // 刷新
+
     },
+
+    // 删除所选
+    deleteSelection() {
+      if (this.multipleSelection.length === 0) {
+        this.$message.warning('请选中！');
+        return;
+      }
+      this.multipleSelection.forEach(item => {
+        console.log(item['teacher_id']);
+      });
+    },
+
+    // 处理多选
     handleSelectionChange(val) {
       this.multipleSelection = val;
     }

@@ -23,7 +23,6 @@
 
 <script>
 import TextUtil from '@/util/TextUtil';
-import request from '@/request/http.js';
 
 import axios from 'axios';
 import qs from 'qs';

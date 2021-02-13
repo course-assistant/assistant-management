@@ -103,19 +103,36 @@ export default {
     // 点击退出
     handleLogout() { },
     confirmLogout() {
+      localStorage.setItem("hncj_management_admin_token", '');
       this.$router.push('/login');
       this.$message.info('已退出');
     },
   },
+
   // 在创建组件前，验证登录信息
-  beforeCreate() {
+  async beforeCreate() {
     // 获取token
     let token = localStorage.getItem("hncj_management_admin_token");
-    if (!token) {
+    // console.log('token：' + token);
+    if (token === null || token.trim() === '') {
       this.$message.warning('请先登录');
-      // this.$router.push('/login');
+      this.$router.push('/login');
       return;
     }
+
+    // 验证token
+    let [data, err] = await this.$awaitWrap(this.$post('authentication', {
+      token: token,
+      type: 1
+    }));
+    if (err) {
+      this.$message.error(err);
+      this.$router.push('/login');
+      return;
+    }
+    // 验证成功
+    console.log(data);
+    this.$message({ showClose: true, type: 'success', message: '欢迎回来' });
   },
 }
 </script>

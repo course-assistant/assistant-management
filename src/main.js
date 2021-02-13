@@ -9,6 +9,7 @@ import store from './store'
 
 import '@/assets/css/reset.css'
 
+import MyAxiosHttp from '@/plugin/http.js';
 
 // 路由发生变化修改页面title
 router.beforeEach((to, from, next) => {
@@ -20,6 +21,7 @@ router.beforeEach((to, from, next) => {
 
 
 Vue.use(ElementUI);
+Vue.use(MyAxiosHttp);
 
 Vue.config.productionTip = false
 

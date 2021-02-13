@@ -23,7 +23,7 @@ const routes = [{
   },
   {
     path: '/',
-    name: 'Home',
+    // name: 'Home',
     component: Home,
     meta: {
       title: '首页'

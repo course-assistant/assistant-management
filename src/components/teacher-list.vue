@@ -171,19 +171,31 @@ export default {
     },
 
     // 禁用按钮切换
-    handleChange(row) {
+    async handleChange(row) {
       console.log(row.teacher_id);
       console.log(row.teacher_status);
       // 切换为disable
+      let params = {
+        id: row.teacher_id,
+        status: 0
+      }
       if (row.teacher_status === 'OK') {
-
+        console.log(row.teacher_id + '切换为disable');
+        params.status = 0;
       }
       // 切换为OK
       else {
-
+        console.log(row.teacher_id + '切换为OK');
+        params.status = 1;
       }
+      let [data, err] = await this.$awaitWrap(this.$post('teacher/status', params));
+      if (err) {
+        this.$message.warning(err);
+        return;
+      }
+      this.$message.success(data.msg);
       // 刷新
-
+      this.refersh(this.currentPage, this.sizePerPage);
     },
 
     // 删除所选

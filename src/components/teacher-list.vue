@@ -73,6 +73,7 @@
       background
       layout="prev, pager, next"
       :total="totalTeacherCount"
+      @current-change="pageChange"
     >
     </el-pagination>
 
@@ -110,9 +111,9 @@ export default {
 
   methods: {
     // 请求数据并刷新
-    async refersh(start, size) {
+    async refersh(page, size) {
       let [data, err] = await this.$awaitWrap(this.$get('teacher/all', {
-        start: start,
+        page: page,
         size: size
       }));
       if (err) {
@@ -123,7 +124,8 @@ export default {
       // 请求成功，拿到数据
       console.log(data);
       this.teachers = this.formatData(data.data.teachers);
-      this.totalTeacherCount = data.data.total;
+      this.totalTeacherCount = data.data.total - 1;
+      console.log(this.totalTeacherCount);
     },
 
     // 处理数据
@@ -181,6 +183,11 @@ export default {
     // 处理多选
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+
+    // 点击分页
+    pageChange(page) {
+      this.refersh(page - 1, 12);
     }
   },
 }

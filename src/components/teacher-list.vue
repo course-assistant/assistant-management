@@ -100,13 +100,15 @@ export default {
       }],
       // 教师总数
       totalTeacherCount: 1,
-      multipleSelection: []
+      multipleSelection: [],
+      currentPage: 0,
+      sizePerPage: 12
     }
   },
 
   // 数据加载
   async created() {
-    this.refersh(0, 12);
+    this.refersh(this.currentPage, this.sizePerPage);
   },
 
   methods: {
@@ -144,13 +146,28 @@ export default {
     },
 
     // 处理重置
-    handleReset(index, id) {
-      console.log('重置：' + index + ' ' + id);
+    async handleReset(index, id) {
+      let [data, err] = await this.$awaitWrap(this.$post('teacher/reset', {
+        id: id
+      }));
+      if (err) {
+        this.$message.warning(err);
+        return;
+      }
+      this.$message.success('重置成功');
     },
 
     // 处理删除
-    handleDelete(index, id) {
-      console.log('删除：' + index + ' ' + id);
+    async handleDelete(index, id) {
+      let [data, err] = await this.$awaitWrap(this.$post('teacher/delete', {
+        id: id
+      }));
+      if (err) {
+        this.$message.warning(err);
+        return;
+      }
+      this.$message.success('删除成功');
+      this.refersh(this.currentPage, this.sizePerPage);
     },
 
     // 禁用按钮切换
@@ -187,7 +204,8 @@ export default {
 
     // 点击分页
     pageChange(page) {
-      this.refersh(page - 1, 12);
+      this.currentPage = page - 1;
+      this.refersh(this.currentPage, this.sizePerPage);
     }
   },
 }

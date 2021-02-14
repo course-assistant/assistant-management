@@ -26,7 +26,7 @@
       <el-table-column label="操作" width="240">
         <template slot-scope="scope">
           <!-- 编辑 -->
-          <el-button size="mini" @click="handleEdit(scope.row.teacher_id)">
+          <el-button size="mini" @click="handleEdit(scope.row)">
             编辑
           </el-button>
 
@@ -81,6 +81,37 @@
     <div class="tools">
       <el-button @click="deleteSelection()">删除所选</el-button>
     </div>
+
+    <!-- 对话框 -->
+    <!-- 编辑教师的对话框 -->
+    <el-dialog
+      title="编辑教师"
+      :visible.sync="editTeacherDialogVisible"
+      width="45%"
+    >
+      <el-form :model="editTeacherForm" label-position="left">
+        <el-form-item label="工 号" label-width="50px">
+          <el-input v-model="editTeacherForm.id" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="姓 名" label-width="50px">
+          <el-input v-model="editTeacherForm.name" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="电 话" label-width="50px">
+          <el-input v-model="editTeacherForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="邮 箱" label-width="50px">
+          <el-input v-model="editTeacherForm.email"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editTeacherDialogVisible = false">
+          取 消
+        </el-button>
+        <el-button type="primary" @click="onEditClick">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -102,7 +133,16 @@ export default {
       totalTeacherCount: 1,
       multipleSelection: [],
       currentPage: 0,
-      sizePerPage: 12
+      sizePerPage: 12,
+
+      // 编辑教师的对话框
+      editTeacherDialogVisible: false,
+      editTeacherForm: {
+        id: '',
+        name: '',
+        phone: '',
+        email: ''
+      }
     }
   },
 
@@ -124,10 +164,11 @@ export default {
         return;
       }
       // 请求成功，拿到数据
+      console.log('刷新成功 ↓ ↓');
       console.log(data);
+      console.log('刷新成功 ↑ ↑');
       this.teachers = this.formatData(data.data.teachers);
       this.totalTeacherCount = data.data.total - 1;
-      console.log(this.totalTeacherCount);
     },
 
     // 处理数据
@@ -141,8 +182,31 @@ export default {
     },
 
     // 点击编辑
-    handleEdit(id) {
-
+    handleEdit(row) {
+      console.log(row);
+      this.editTeacherDialogVisible = true;
+      this.editTeacherForm = {
+        id: row.teacher_id,
+        name: row.teacher_name,
+        phone: row.teacher_phone,
+        email: row.teacher_email
+      }
+    },
+    // 处理编辑
+    async onEditClick() {
+      let params = {
+        id: this.editTeacherForm.id,
+        phone: this.editTeacherForm.phone,
+        email: this.editTeacherForm.email
+      }
+      let [data, err] = await this.$awaitWrap(this.$post('/teacher/update', params));
+      if (err) {
+        this.$message.warning(err);
+        return;
+      }
+      this.editTeacherDialogVisible = false;
+      this.$message.success(data.msg);
+      this.refersh(this.currentPage, this.sizePerPage);
     },
 
     // 处理重置

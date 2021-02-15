@@ -111,6 +111,7 @@ export default {
     },
   },
 
+
   // 在创建组件前，验证登录信息
   async beforeCreate() {
     // 获取token
@@ -134,7 +135,19 @@ export default {
     }
     // 验证成功
     console.log('身份验证成功');
-    this.$message({ showClose: true, type: 'success', message: '欢迎回来' });
+
+    this.$notify({
+      title: '欢迎回来',
+      message: '浏览器会记住您的登录信息，以方便您下次打开此网页后跳过登录验证。',
+      offset: 62
+    });
+
+    setTimeout(() => {
+      this.$notify({
+        message: '如果这个不是您的电脑，请在关闭浏览器前在右上角安全退出！。',
+        offset: 62
+      });
+    })
   },
 }
 </script>

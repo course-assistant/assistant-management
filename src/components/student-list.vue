@@ -133,7 +133,7 @@ export default {
       totalStudentCount: 1,
       multipleSelection: [],
       currentPage: 0,
-      sizePerPage: 12,
+      sizePerPage: 13,
 
       // 编辑学生的对话框
       editStudentDialogVisible: false,

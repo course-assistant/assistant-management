@@ -133,7 +133,7 @@ export default {
       totalTeacherCount: 1,
       multipleSelection: [],
       currentPage: 0,
-      sizePerPage: 12,
+      sizePerPage: 13,
 
       // 编辑教师的对话框
       editTeacherDialogVisible: false,

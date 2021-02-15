@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>其他</h1>
+    <h1>备用页面</h1>
   </div>
 </template>
 

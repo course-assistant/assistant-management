@@ -1,5 +1,22 @@
 <template>
   <div id="teacher-div">
+    <!-- 顶部的工具按钮 -->
+    <div class="tools-top">
+      <el-col :span="8">
+        <el-input
+          id="searchBar"
+          placeholder="输入工号/姓名"
+          v-model="searchBarText"
+          clearable
+        >
+        </el-input>
+      </el-col>
+      <el-button id="btn-search">搜索</el-button>
+      <el-button>添加教师</el-button>
+      <el-button>批量导入</el-button>
+    </div>
+
+    <!-- 教师表格 -->
     <el-table
       id="teacher-table"
       ref="multipleTable"
@@ -78,7 +95,7 @@
     </el-pagination>
 
     <!-- 工具按钮 -->
-    <div class="tools">
+    <div class="tools-bottom">
       <el-button @click="deleteSelection()">删除所选</el-button>
     </div>
 
@@ -129,6 +146,8 @@ export default {
         teacher_status: 'LOADING',
         enable: false
       }],
+      // 搜索框文字
+      searchBarText: '',
       // 教师总数
       totalTeacherCount: 1,
       multipleSelection: [],
@@ -303,9 +322,17 @@ export default {
     margin-bottom: 0;
   }
 
+  // 顶部工具按钮
+  .tools-top {
+    margin-bottom: 10px;
+    #btn-search {
+      margin-left: 10px;
+    }
+  }
+
   // 底部工具按钮
-  .tools {
-    margin-top: 10px;
+  .tools-bottom {
+    margin-top: 7px;
   }
 }
 </style>

@@ -1,5 +1,21 @@
 <template>
   <div id="student-div">
+    <!-- 顶部的工具按钮 -->
+    <div class="tools-top">
+      <el-col :span="8">
+        <el-input
+          id="searchBar"
+          placeholder="输入学号/姓名"
+          v-model="searchBarText"
+          clearable
+        >
+        </el-input>
+      </el-col>
+      <el-button id="btn-search">搜索</el-button>
+      <el-button>添加学生</el-button>
+      <el-button>批量导入</el-button>
+    </div>
+
     <el-table
       id="student-table"
       ref="multipleTable"
@@ -78,7 +94,7 @@
     </el-pagination>
 
     <!-- 工具按钮 -->
-    <div class="tools">
+    <div class="tools-bottom">
       <el-button @click="deleteSelection()">删除所选</el-button>
     </div>
 
@@ -134,6 +150,8 @@ export default {
       multipleSelection: [],
       currentPage: 0,
       sizePerPage: 13,
+
+      searchBarText: '',
 
       // 编辑学生的对话框
       editStudentDialogVisible: false,
@@ -303,9 +321,17 @@ export default {
     margin-bottom: 0;
   }
 
+  // 顶部工具按钮
+  .tools-top {
+    margin-bottom: 10px;
+    #btn-search {
+      margin-left: 10px;
+    }
+  }
+
   // 底部工具按钮
-  .tools {
-    margin-top: 10px;
+  .tools-bottom {
+    margin-top: 7px;
   }
 }
 </style>

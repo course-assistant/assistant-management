@@ -5,14 +5,14 @@
       <el-col :span="8">
         <el-input
           id="searchBar"
-          placeholder="输入学号/姓名"
+          placeholder="输入学号"
           v-model="searchBarText"
           clearable
         >
         </el-input>
       </el-col>
       <el-button id="btn-search">搜索</el-button>
-      <el-button>添加学生</el-button>
+      <el-button @click="handleAddStudent">添加学生</el-button>
       <el-button>批量导入</el-button>
     </div>
 
@@ -109,16 +109,20 @@
         <el-form-item label="学 号" label-width="50px">
           <el-input v-model="editStudentForm.id" disabled></el-input>
         </el-form-item>
+
         <el-form-item label="姓 名" label-width="50px">
           <el-input v-model="editStudentForm.name" disabled></el-input>
         </el-form-item>
+
         <el-form-item label="电 话" label-width="50px">
           <el-input v-model="editStudentForm.phone"></el-input>
         </el-form-item>
+
         <el-form-item label="邮 箱" label-width="50px">
           <el-input v-model="editStudentForm.email"></el-input>
         </el-form-item>
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="editStudentDialogVisible = false">
           取 消
@@ -127,7 +131,57 @@
           确 定
         </el-button>
       </div>
+
     </el-dialog>
+
+    <!-- 对话框 -->
+    <!-- 添加学生的对话框 -->
+    <el-dialog
+      title="添加学生"
+      :visible.sync="addStudentDialogVisible"
+      width="45%"
+    >
+      <el-form :model="addStudentForm" label-position="left">
+        <el-form-item label="学 号" label-width="50px">
+          <el-input v-model="addStudentForm.id"></el-input>
+        </el-form-item>
+        <el-form-item label="姓 名" label-width="50px">
+          <el-input v-model="addStudentForm.name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="性 别" label-width="50px">
+          <el-select v-model="addStudentForm.sex" placeholder="性别">
+            <el-option
+              v-for="item in sexOpts"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="电 话" label-width="50px">
+          <el-input v-model="addStudentForm.phone"></el-input>
+        </el-form-item>
+
+        <el-form-item label="邮 箱" label-width="50px">
+          <el-input v-model="addStudentForm.email"></el-input>
+        </el-form-item>
+
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addStudentDialogVisible = false">
+          取 消
+        </el-button>
+        <el-button type="primary" @click="onAddClick">
+          确 定
+        </el-button>
+      </div>
+
+    </el-dialog>
+
   </div>
 </template>
 
@@ -160,7 +214,25 @@ export default {
         name: '',
         phone: '',
         email: ''
-      }
+      },
+
+      // 添加学生的对话框
+      addStudentDialogVisible: false,
+      addStudentForm: {
+        id: '',
+        name: '',
+        sex: 1,
+        phone: '',
+        email: ''
+      },
+      sexOpts: [{
+        value: 1,
+        label: '男'
+      }, {
+        value: 0,
+        label: '女'
+      }]
+
     }
   },
 
@@ -225,6 +297,24 @@ export default {
       this.editStudentDialogVisible = false;
       this.$message.success(data.msg);
       this.refersh(this.currentPage, this.sizePerPage);
+    },
+
+    // 点击添加
+    handleAddStudent() {
+      this.addStudentDialogVisible = true;
+    },
+
+    // 处理添加
+    onAddClick() {
+      console.log(this.addStudentForm);
+
+      // 拿到当前管理员用户的id
+      // 从token里面获取
+      // jwt
+
+      console.log(localStorage.getItem('hncj_management_admin_token'));
+
+      // this.addStudentDialogVisible = false;
     },
 
     // 处理重置

@@ -131,7 +131,6 @@
           确 定
         </el-button>
       </div>
-
     </el-dialog>
 
     <!-- 对话框 -->
@@ -168,7 +167,6 @@
         <el-form-item label="邮 箱" label-width="50px">
           <el-input v-model="addStudentForm.email"></el-input>
         </el-form-item>
-
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -179,13 +177,12 @@
           确 定
         </el-button>
       </div>
-
     </el-dialog>
-
   </div>
 </template>
 
 <script>
+import jwt_decode from '@/util/jwt-decode.js';
 export default {
   data() {
     return {
@@ -294,9 +291,9 @@ export default {
         this.$message.warning(err);
         return;
       }
-      this.editStudentDialogVisible = false;
       this.$message.success(data.msg);
       this.refersh(this.currentPage, this.sizePerPage);
+      this.editStudentDialogVisible = false;
     },
 
     // 点击添加
@@ -305,16 +302,33 @@ export default {
     },
 
     // 处理添加
-    onAddClick() {
-      console.log(this.addStudentForm);
-
+    async onAddClick() {
       // 拿到当前管理员用户的id
       // 从token里面获取
-      // jwt
+      let obj = jwt_decode(localStorage.getItem('hncj_management_admin_token'));
+      this.addStudentForm.admin_id = obj.id;
 
-      console.log(localStorage.getItem('hncj_management_admin_token'));
+      console.log(this.addStudentForm);
 
-      // this.addStudentDialogVisible = false;
+      let [data, err] = await this.$awaitWrap(this.$post('student/insert', this.addStudentForm));
+
+      if (err) {
+        this.$message.warning(err);
+        return;
+      }
+
+      this.$message.success(data.msg);
+      this.addStudentDialogVisible = false;
+      this.refersh(this.currentPage, this.sizePerPage);
+
+      // 清空表单的数据
+      this.addStudentForm = {
+        id: '',
+        name: '',
+        sex: 1,
+        phone: '',
+        email: ''
+      };
     },
 
     // 处理重置

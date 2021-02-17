@@ -12,7 +12,7 @@
         </el-input>
       </el-col>
       <el-button id="btn-search">搜索</el-button>
-      <el-button>添加教师</el-button>
+      <el-button @click="addTeacherDialogVisible = true">添加教师</el-button>
       <el-button>批量导入</el-button>
     </div>
 
@@ -110,16 +110,20 @@
         <el-form-item label="工 号" label-width="50px">
           <el-input v-model="editTeacherForm.id" disabled></el-input>
         </el-form-item>
+
         <el-form-item label="姓 名" label-width="50px">
           <el-input v-model="editTeacherForm.name" disabled></el-input>
         </el-form-item>
+
         <el-form-item label="电 话" label-width="50px">
           <el-input v-model="editTeacherForm.phone"></el-input>
         </el-form-item>
+
         <el-form-item label="邮 箱" label-width="50px">
           <el-input v-model="editTeacherForm.email"></el-input>
         </el-form-item>
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="editTeacherDialogVisible = false">
           取 消
@@ -129,10 +133,57 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <!-- 对话框 -->
+    <!-- 添加教师的对话框 -->
+    <el-dialog
+      title="添加学生"
+      :visible.sync="addTeacherDialogVisible"
+      width="45%"
+    >
+      <el-form :model="addTeacherForm" label-position="left">
+        <el-form-item label="工 号" label-width="50px">
+          <el-input v-model="addTeacherForm.id"></el-input>
+        </el-form-item>
+        <el-form-item label="姓 名" label-width="50px">
+          <el-input v-model="addTeacherForm.name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="性 别" label-width="50px">
+          <el-select v-model="addTeacherForm.sex" placeholder="性别">
+            <el-option
+              v-for="item in sexOpts"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="电 话" label-width="50px">
+          <el-input v-model="addTeacherForm.phone"></el-input>
+        </el-form-item>
+
+        <el-form-item label="邮 箱" label-width="50px">
+          <el-input v-model="addTeacherForm.email"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addTeacherDialogVisible = false">
+          取 消
+        </el-button>
+        <el-button type="primary" @click="onAddClick">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import jwt_decode from '@/util/jwt-decode.js';
 export default {
   data() {
     return {
@@ -161,7 +212,24 @@ export default {
         name: '',
         phone: '',
         email: ''
-      }
+      },
+
+      // 添加教师的对话框
+      addTeacherDialogVisible: false,
+      addTeacherForm: {
+        id: '',
+        name: '',
+        sex: 1,
+        phone: '',
+        email: ''
+      },
+      sexOpts: [{
+        value: 1,
+        label: '男'
+      }, {
+        value: 0,
+        label: '女'
+      }]
     }
   },
 
@@ -226,6 +294,35 @@ export default {
       this.editTeacherDialogVisible = false;
       this.$message.success(data.msg);
       this.refersh(this.currentPage, this.sizePerPage);
+    },
+
+    // 处理添加
+    async onAddClick() {
+      // 拿到当前管理员用户的id
+      // 从token里面获取
+      let obj = jwt_decode(localStorage.getItem('hncj_management_admin_token'));
+      this.addTeacherForm.admin_id = obj.id;
+
+      let [data, err] = await this.$awaitWrap(this.$post('teacher/insert', this.addTeacherForm));
+
+      if (err) {
+        this.$message.warning(err);
+        return;
+      }
+
+      this.$message.success(data.msg);
+      this.addTeacherDialogVisible = false;
+      this.refersh(this.currentPage, this.sizePerPage);
+
+      // 清空表单的数据
+      this.addTeacherForm = {
+        id: '',
+        name: '',
+        sex: 1,
+        phone: '',
+        email: ''
+      };
+
     },
 
     // 处理重置

@@ -31,6 +31,8 @@ MyAxiosHttp.install = (Vue) => {
                 if (res.data) {
                     if (res.data.code === 200) {
                         resolve(res.data);
+                    } else if (res.data.code === 300) {
+                        resolve(res.data);
                     } else {
                         reject(res.data.msg);
                     }
@@ -57,6 +59,8 @@ MyAxiosHttp.install = (Vue) => {
             }).then(res => {
                 if (res.data) {
                     if (res.data.code === 200) {
+                        resolve(res.data);
+                    } else if (res.data.code === 300) {
                         resolve(res.data);
                     } else {
                         reject(res.data.msg);

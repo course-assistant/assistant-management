@@ -11,7 +11,7 @@
         >
         </el-input>
       </el-col>
-      <el-button id="btn-search">搜索</el-button>
+      <el-button id="btn-search" @click="handleSearch">搜索</el-button>
       <el-button @click="handleAddStudent">添加学生</el-button>
       <el-button>批量导入</el-button>
     </div>
@@ -202,7 +202,9 @@ export default {
       currentPage: 0,
       sizePerPage: 13,
 
+      // 搜索框文字
       searchBarText: '',
+      searching: false,
 
       // 编辑学生的对话框
       editStudentDialogVisible: false,
@@ -241,13 +243,30 @@ export default {
   methods: {
     // 请求数据并刷新
     async refersh(page, size) {
-      let [data, err] = await this.$awaitWrap(this.$get('student/all', {
-        page: page,
-        size: size
-      }));
+      let err, data;
+      // 判断是否在搜索中
+      if (this.searching) {
+        [data, err] = await this.$awaitWrap(this.$get('student/all', {
+          page: page,
+          size: size,
+          condition: this.searchBarText
+        }));
+      } else {
+        [data, err] = await this.$awaitWrap(this.$get('student/all', {
+          page: page,
+          size: size
+        }));
+      }
+
       if (err) {
         this.$message.warning(err);
         this.students = [];
+        return;
+      }
+      if (data.code === 300) {
+        this.$message.info(data.msg);
+        this.students = [];
+        this.totalStudentCount = 0;
         return;
       }
       // 请求成功，拿到数据
@@ -266,6 +285,12 @@ export default {
         students[i].student_status = students[i].student_status === 1 ? 'OK' : 'Disable';
       }
       return students;
+    },
+
+    // 点击搜索
+    handleSearch() {
+      this.searching = true;
+      this.refersh(0, this.sizePerPage);
     },
 
     // 点击编辑

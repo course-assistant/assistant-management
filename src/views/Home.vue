@@ -57,7 +57,7 @@
               <span>学生管理</span>
             </template>
             <el-menu-item-group>
-              <template slot="title">管理你的商品</template>
+              <template slot="title">管理学生用户</template>
               <el-menu-item index="student-list">学生列表</el-menu-item>
             </el-menu-item-group>
           </el-submenu>

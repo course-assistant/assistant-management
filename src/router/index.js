@@ -23,17 +23,16 @@ const routes = [{
   },
   {
     path: '/',
-    // name: 'Home',
     component: Home,
     meta: {
       title: '首页'
     },
     children: [
-      // 教师列表
+      // 默认-教师列表
       {
         name: 'home',
         path: '',
-        component: HomePage,
+        component: TeacherList,
         meta: {
           title: '管理员页面'
         }
@@ -71,7 +70,8 @@ const routes = [{
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })

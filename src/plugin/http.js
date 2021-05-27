@@ -8,8 +8,8 @@ import qs from 'qs';
 const MyAxiosHttp = {};
 
 const axios_instance = axios.create({
-    // baseURL: 'http://127.0.0.1:8686/',
-    baseURL: 'http://123.56.156.212:8686/',
+    baseURL: 'http://127.0.0.1:8686/',
+    // baseURL: 'https://tanyiqu.top:8686/',
     timeout: 5000
 });
 
